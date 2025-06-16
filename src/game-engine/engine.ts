@@ -1,0 +1,99 @@
+export interface Player {
+  id: number
+  coins: number
+}
+
+export interface GameState {
+  players: Player[]
+  turn: number
+}
+
+//region Exported function
+
+/**
+ * Initializes the game with a given number of players, each starting with initialCoins.
+ * @param numPlayers Number of players to start with (default: 100)
+ * @param initialCoins Starting coins per player (default: 10)
+ * @returns GameState object
+ */
+export function startGame(
+  numPlayers: number = 100,
+  initialCoins: number = 10
+): GameState {
+  const players: Player[] = []
+  for (let i = 1; i <= numPlayers; i++) {
+    players.push({ id: i, coins: initialCoins })
+  }
+  return { players, turn: 0 }
+}
+
+/**
+ * Runs one turn of the game: processes a round and increments turn count.
+ * @param state Current GameState
+ * @returns New GameState after one turn
+ */
+export function stepGame(state: GameState): GameState {
+  if (state.players.length <= 1) {
+    return state
+  }
+  const nextPlayers = round(state.players)
+  const nextTurn = state.turn + 1
+  return { players: nextPlayers, turn: nextTurn }
+}
+
+//region Private functions
+
+/**
+ * Shuffles an array in place using Fisher–Yates algorithm.
+ */
+function shufflePlayers(players: Player[]): Player[] {
+  const arr = [...players]
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
+/**
+ * Handles the betting and coin flip for a pair of players.
+ * Returns an array of surviving players (1 or 2) after the match.
+ */
+function playMatch(a: Player, b: Player): Player[] {
+  if (a.coins <= 0 || b.coins <= 0) {
+    return [a.coins > 0 ? a : b].filter(p => p.coins > 0)
+  }
+  a.coins--
+  b.coins--
+  const flipAWin = Math.random() < 0.5
+  if (flipAWin) {
+    a.coins += 2
+  } else {
+    b.coins += 2
+  }
+  return [a, b].filter(p => p.coins > 0)
+}
+
+/**
+ * Executes one full round: shuffles players, handles odd player, processes matches.
+ */
+function round(players: Player[]): Player[] {
+  const shuffled = shufflePlayers(players)
+  const survivors: Player[] = []
+
+  let startIdx = 0
+  // If odd, first player sits out
+  if (shuffled.length % 2 === 1) {
+    survivors.push({ ...shuffled[0] })
+    startIdx = 1
+  }
+
+  // Process all pairs
+  for (let i = startIdx; i < shuffled.length; i += 2) {
+    const [a, b] = [{ ...shuffled[i] }, { ...shuffled[i + 1] }]
+    const matchSurvivors = playMatch(a, b)
+    survivors.push(...matchSurvivors)
+  }
+
+  return survivors
+}
