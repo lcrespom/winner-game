@@ -4,10 +4,12 @@ import { startGame, stepGame } from './game-engine/engine'
 function startSimulation() {
   console.log('TODO: simulate')
   let state = startGame()
-  for (let i = 0; i < 100; i++) {
+  let i = 0
+  do {
+    i++
     state = stepGame(state)
-    console.dir(state)
-  }
+    console.log(`Step: ${i} - players: ${state.players.length}`)
+  } while (state.players.length > 1)
 }
 
 function App() {
