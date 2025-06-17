@@ -45,7 +45,7 @@ export const CoinBarChart: React.FC<CoinBarChartProps> = ({
                 width: '2px',
                 height: `${barHeight}px`,
                 backgroundColor: '#4CAF50',
-                transition: 'height 0.3s ease',
+                // transition: 'height 0.3s ease',
               }}
             />
             {/* <div style={{ marginTop: '4px', fontSize: '9px' }}>{player.coins}</div> */}

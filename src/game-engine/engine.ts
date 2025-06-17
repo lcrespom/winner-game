@@ -44,8 +44,8 @@ export function stepGame(state: GameState): GameState {
 
 export function normalizeGame(state: GameState): GameState {
   const players: Player[] = []
-  for (let i = 1; i <= state.initialPlayers; i++) players.push({ id: i, coins: 0 })
-  for (const player of state.players) players[player.id] = player
+  for (let i = 0; i < state.initialPlayers; i++) players.push({ id: i + 1, coins: 0 })
+  for (const player of state.players) players[player.id - 1] = player
   return { ...state, players }
 }
 
