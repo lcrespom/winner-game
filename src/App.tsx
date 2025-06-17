@@ -1,23 +1,33 @@
 import './App.css'
-import { startGame, stepGame } from './game-engine/engine'
+import { startGame, stepGame, normalizeGame } from './game-engine/engine'
+import GameGraph from './components/game-graph'
+import { useState } from 'react'
 
-function startSimulation() {
-  console.log('TODO: simulate')
-  let state = startGame()
-  let i = 0
-  do {
-    i++
-    state = stepGame(state)
-    console.log(`Step: ${i} - players: ${state.players.length}`)
-  } while (state.players.length > 1)
-}
+const TURNS_PER_FRAME = 1000
 
 function App() {
+  const [gameState, setGameState] = useState(startGame())
+
+  function startSimulation() {
+    requestAnimationFrame(gameFrame)
+  }
+
+  function gameFrame() {
+    let tmpState = gameState
+    for (let i = 0; i < TURNS_PER_FRAME; i++) {
+      tmpState = stepGame(tmpState)
+    }
+    setGameState(normalizeGame(tmpState))
+    requestAnimationFrame(gameFrame)
+  }
+
   return (
     <>
       <h1>Test</h1>
-      <p>Hello</p>
-      <button onClick={startSimulation}>Start simulation</button>
+      <GameGraph state={gameState} />
+      <button onClick={startSimulation}>
+        {gameState.turn == 0 ? 'Start Game' : 'Stop Game (ToDo)'}
+      </button>
     </>
   )
 }

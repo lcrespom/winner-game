@@ -1,11 +1,12 @@
-export interface Player {
+export type Player = {
   id: number
   coins: number
 }
 
-export interface GameState {
+export type GameState = {
   players: Player[]
   turn: number
+  initialPlayers: number
 }
 
 //region Exported function
@@ -24,7 +25,7 @@ export function startGame(
   for (let i = 1; i <= numPlayers; i++) {
     players.push({ id: i, coins: initialCoins })
   }
-  return { players, turn: 0 }
+  return { players, turn: 0, initialPlayers: numPlayers }
 }
 
 /**
@@ -38,7 +39,14 @@ export function stepGame(state: GameState): GameState {
   }
   const nextPlayers = round(state.players)
   const nextTurn = state.turn + 1
-  return { players: nextPlayers, turn: nextTurn }
+  return { players: nextPlayers, turn: nextTurn, initialPlayers: state.initialPlayers }
+}
+
+export function normalizeGame(state: GameState): GameState {
+  const players: Player[] = []
+  for (let i = 1; i <= state.initialPlayers; i++) players.push({ id: i, coins: 0 })
+  for (const player of state.players) players[player.id] = player
+  return { ...state, players }
 }
 
 //region Private functions
