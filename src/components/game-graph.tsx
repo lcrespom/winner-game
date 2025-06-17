@@ -10,10 +10,10 @@ interface CoinBarChartProps {
 export const CoinBarChart: React.FC<CoinBarChartProps> = ({
   state,
   width = '100%',
-  height = '200px',
+  height = '530px',
 }) => {
   const { players } = state
-  const maxCoins = Math.max(...players.map(p => p.coins), 1)
+  const maxCoins = players.reduce((coins, player) => coins + player.coins, 0) // Math.max(...players.map(p => p.coins), 1)
 
   return (
     <div
@@ -25,10 +25,11 @@ export const CoinBarChart: React.FC<CoinBarChartProps> = ({
         border: '1px solid #ccc',
         padding: '8px',
         boxSizing: 'border-box',
+        marginBottom: '1em',
       }}
     >
       {players.map(player => {
-        const barHeight = (player.coins / maxCoins) * 100
+        const barHeight = (player.coins / maxCoins) * 500
         return (
           <div
             key={player.id}
