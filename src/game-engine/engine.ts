@@ -45,6 +45,12 @@ export function stepGame(state: GameState): GameState {
   return { players: nextPlayers, turn: nextTurn, initialPlayers: state.initialPlayers }
 }
 
+/**
+ * Rearranges GameState, with each player in its expected position and players with 0 coins,
+ *  to make it easier to display the game state in the UI.
+ * @param state Current GameState
+ * @returns Normalized GameState
+ */
 export function normalizeGame(state: GameState): GameState {
   const players: Player[] = []
   for (let i = 0; i < state.initialPlayers; i++) players.push({ id: i + 1, coins: 0 })
