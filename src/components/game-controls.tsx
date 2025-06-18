@@ -12,7 +12,11 @@ const GameControls: React.FC<GameControlsProps> = ({ onStart }) => {
     onStart()
   }
 
-  return <button onClick={startClicked}>{running ? 'Restart' : 'Start'}</button>
+  return (
+    <div className="round-border my-4 flex w-full items-end p-2">
+      <button onClick={startClicked}>{running ? 'Restart' : 'Start'}</button>
+    </div>
+  )
 }
 
 /*
