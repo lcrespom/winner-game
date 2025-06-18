@@ -17,38 +17,12 @@ export const CoinBarChart: React.FC<CoinBarChartProps> = ({
 
   //TODO: add values in Y axis
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'flex-end',
-        width,
-        height,
-        border: '1px solid #ccc',
-        padding: '8px',
-        boxSizing: 'border-box',
-        margin: '1em 0',
-      }}
-    >
+    <div className="game-graph" style={{ width, height }}>
       {players.map(player => {
         const barHeight = (player.coins / maxCoins) * 400
         return (
-          <div
-            key={player.id}
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-            }}
-          >
-            <div
-              style={{
-                width: '2px',
-                height: `${barHeight}px`,
-                backgroundColor: '#4CAF50',
-              }}
-            />
+          <div className="player-bar" key={player.id}>
+            <div style={{ height: `${barHeight}px` }} />
           </div>
         )
       })}
