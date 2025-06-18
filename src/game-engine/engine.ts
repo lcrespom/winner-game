@@ -20,8 +20,7 @@ export type GameParams = {
 
 /**
  * Initializes the game with a given number of players, each starting with initialCoins.
- * @param numPlayers Number of players to start with (default: 100)
- * @param initialCoins Starting coins per player (default: 10)
+ * @param params game parameters
  * @returns GameState object
  */
 export function startGame(params: GameParams): GameState {
