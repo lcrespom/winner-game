@@ -1,31 +1,40 @@
-import './App.css'
-import { startGame, stepGame, normalizeGame } from './game-engine/engine'
-import GameGraph from './components/game-graph'
 import { useState } from 'react'
-import GameControls from './components/game-controls'
 
-const TURNS_PER_FRAME = 1000
+import './App.css'
+
+import GameControls from './components/game-controls'
+import GameGraph from './components/game-graph'
+
+import { normalizeGame, startGame, stepGame, type GameParams } from './game-engine/engine'
+
+const REFRESH_RATE = 30 // Screen updates per second
+
+const gameParams: GameParams = {
+  numPlayers: 100,
+  initialCoins: 10,
+  turnsPerSecond: 100_000,
+  helpTurns: 0,
+}
 
 function doNothing() {}
 
 function App() {
-  const [gameState, setGameState] = useState(() => startGame())
+  const [gameState, setGameState] = useState(() => startGame(gameParams))
 
   function startSimulation() {
-    setGameState(startGame())
-    requestAnimationFrame(gameFrame)
+    setGameState(startGame(gameParams))
+    setTimeout(gameFrame, 0)
   }
 
   function gameFrame() {
     let refresh = true
+    const turnsPerFrame = Math.round(gameParams.turnsPerSecond / REFRESH_RATE)
     setGameState(state => {
       if (state.players.length == 1) refresh = false
-      for (let i = 0; i < TURNS_PER_FRAME; i++) {
-        state = stepGame(state)
-      }
+      for (let i = 0; i < turnsPerFrame; i++) state = stepGame(state)
       return state
     })
-    if (refresh) requestAnimationFrame(gameFrame)
+    if (refresh) setTimeout(gameFrame, 1000 / REFRESH_RATE)
   }
 
   return (

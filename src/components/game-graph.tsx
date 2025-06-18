@@ -9,7 +9,10 @@ let maxCoins = 0
 
 export const CoinBarChart: React.FC<CoinBarChartProps> = ({ state }) => {
   const { players } = state
-  if (maxCoins == 0) maxCoins = players.reduce((coins, player) => coins + player.coins, 0)
+  if (maxCoins == 0) {
+    maxCoins = players.reduce((coins, player) => coins + player.coins, 0)
+    console.log({ maxCoins })
+  }
 
   //TODO: add values in Y axis
   return (

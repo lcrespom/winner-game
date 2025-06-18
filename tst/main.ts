@@ -1,12 +1,17 @@
-import { startGame, stepGame, type GameState } from '../src/game-engine/engine.ts'
+import { GameParams, GameState, startGame, stepGame } from '../src/game-engine/engine.ts'
 
-const NUM_PLAYERS = 100
-const INITIAL_MONEY = 100
 const HELP_TURNS = 90
+
+const params: GameParams = {
+  numPlayers: 100,
+  initialCoins: 100,
+  turnsPerSecond: 100_000,
+  helpTurns: 0,
+}
 
 function runSimulation() {
   const NumFmt = Intl.NumberFormat()
-  let state = startGame(NUM_PLAYERS, INITIAL_MONEY)
+  let state = startGame(params)
   let players = 0
   let helpct = HELP_TURNS
   do {

@@ -9,6 +9,13 @@ export type GameState = {
   initialPlayers: number
 }
 
+export type GameParams = {
+  numPlayers: number
+  initialCoins: number
+  turnsPerSecond: number
+  helpTurns: number
+}
+
 //region Exported function
 
 /**
@@ -17,15 +24,12 @@ export type GameState = {
  * @param initialCoins Starting coins per player (default: 10)
  * @returns GameState object
  */
-export function startGame(
-  numPlayers: number = 100,
-  initialCoins: number = 10
-): GameState {
+export function startGame(params: GameParams): GameState {
   const players: Player[] = []
-  for (let i = 1; i <= numPlayers; i++) {
-    players.push({ id: i, coins: initialCoins })
+  for (let i = 1; i <= params.numPlayers; i++) {
+    players.push({ id: i, coins: params.initialCoins })
   }
-  return { players, turn: 0, initialPlayers: numPlayers }
+  return { players, turn: 0, initialPlayers: params.numPlayers }
 }
 
 /**
