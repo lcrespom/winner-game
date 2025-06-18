@@ -6,6 +6,8 @@ import GameControls from './components/game-controls'
 
 const TURNS_PER_FRAME = 1000
 
+function doNothing() {}
+
 function App() {
   const [gameState, setGameState] = useState(() => startGame())
 
@@ -30,7 +32,11 @@ function App() {
     <>
       <h1>Success to the Successful — Competitive Exclusion</h1>
       <GameGraph state={normalizeGame(gameState)} />
-      <GameControls onStart={startSimulation} />
+      <GameControls
+        onStart={startSimulation}
+        onPause={doNothing}
+        onContinue={doNothing}
+      />
     </>
   )
 }
