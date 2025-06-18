@@ -6,7 +6,7 @@ export type Player = {
 export type GameState = {
   players: Player[]
   turn: number
-  initialPlayers: number
+  params: GameParams
 }
 
 export type GameParams = {
@@ -28,7 +28,7 @@ export function startGame(params: GameParams): GameState {
   for (let i = 1; i <= params.numPlayers; i++) {
     players.push({ id: i, coins: params.initialCoins })
   }
-  return { players, turn: 0, initialPlayers: params.numPlayers }
+  return { players, turn: 0, params }
 }
 
 /**
@@ -37,12 +37,11 @@ export function startGame(params: GameParams): GameState {
  * @returns New GameState after one turn
  */
 export function stepGame(state: GameState): GameState {
-  if (state.players.length <= 1) {
-    return state
-  }
+  if (state.players.length <= 1) return state
   const nextPlayers = round(state.players)
   const nextTurn = state.turn + 1
-  return { players: nextPlayers, turn: nextTurn, initialPlayers: state.initialPlayers }
+  checkHelpEverybody(nextTurn, state.params.helpTurns, nextPlayers)
+  return { players: nextPlayers, turn: nextTurn, params: state.params }
 }
 
 /**
@@ -53,7 +52,7 @@ export function stepGame(state: GameState): GameState {
  */
 export function normalizeGame(state: GameState): GameState {
   const players: Player[] = []
-  for (let i = 0; i < state.initialPlayers; i++) players.push({ id: i + 1, coins: 0 })
+  for (let i = 0; i < state.params.numPlayers; i++) players.push({ id: i + 1, coins: 0 })
   for (const player of state.players) players[player.id - 1] = player
   return { ...state, players }
 }
@@ -97,20 +96,22 @@ function playMatch(a: Player, b: Player): Player[] {
 function round(players: Player[]): Player[] {
   const shuffled = shufflePlayers(players)
   const survivors: Player[] = []
-
   let startIdx = 0
   // If odd, first player sits out
   if (shuffled.length % 2 === 1) {
     survivors.push({ ...shuffled[0] })
     startIdx = 1
   }
-
   // Process all pairs
   for (let i = startIdx; i < shuffled.length; i += 2) {
     const [a, b] = [{ ...shuffled[i] }, { ...shuffled[i + 1] }]
     const matchSurvivors = playMatch(a, b)
     survivors.push(...matchSurvivors)
   }
-
   return survivors
+}
+
+function checkHelpEverybody(turn: number, helpTurns: number, players: Player[]) {
+  if (helpTurns == 0 || turn % helpTurns != 0) return
+  for (const player of players) player.coins++
 }

@@ -13,7 +13,7 @@ const gameParams: GameParams = {
   numPlayers: 100,
   initialCoins: 10,
   turnsPerSecond: 100_000,
-  helpTurns: 0,
+  helpTurns: 100,
 }
 
 function doNothing() {}

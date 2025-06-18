@@ -5,14 +5,10 @@ interface CoinBarChartProps {
   state: GameState
 }
 
-let maxCoins = 0
-
 export const CoinBarChart: React.FC<CoinBarChartProps> = ({ state }) => {
   const { players } = state
-  if (maxCoins == 0) {
-    maxCoins = players.reduce((coins, player) => coins + player.coins, 0)
-    console.log({ maxCoins })
-  }
+  const maxCoins = players.reduce((coins, player) => coins + player.coins, 0)
+  // const maxCoins = Math.max(...players.map(p => p.coins), 1)
 
   //TODO: add values in Y axis
   return (
