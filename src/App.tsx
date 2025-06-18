@@ -42,9 +42,11 @@ function App() {
       <h1>Success to the Successful — Competitive Exclusion</h1>
       <GameGraph state={normalizeGame(gameState)} />
       <GameControls
+        state={gameState}
         onStart={startSimulation}
         onPause={doNothing}
         onContinue={doNothing}
+        onTpsChange={doNothing}
       />
     </>
   )

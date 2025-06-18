@@ -1,12 +1,21 @@
 import { useState } from 'react'
 
+import type { GameState } from '../game-engine/engine'
+
 interface GameControlsProps {
+  state: GameState
   onStart: () => void
   onPause: () => void
   onContinue: () => void
+  onTpsChange: (tps: number) => void
 }
 
-const GameControls: React.FC<GameControlsProps> = ({ onStart, onPause, onContinue }) => {
+const GameControls: React.FC<GameControlsProps> = ({
+  state,
+  onStart,
+  onPause,
+  onContinue,
+}) => {
   const [started, setStarted] = useState(false)
   const [running, setRunning] = useState(false)
 
@@ -26,15 +35,18 @@ const GameControls: React.FC<GameControlsProps> = ({ onStart, onPause, onContinu
   }
 
   return (
-    <div className="round-border my-4 flex w-full items-end justify-between p-2">
-      <button onClick={startClicked}>{started ? 'Restart' : 'Start'}</button>
-      <button onClick={pauseClicked}>
+    <div className="round-border relative my-4 w-full p-2">
+      <button className="absolute left-2" onClick={startClicked}>
+        {started ? 'Restart' : 'Start'}
+      </button>
+      <button className="absolute left-1/2 -translate-x-1/2" onClick={pauseClicked}>
         {started ? (running ? 'Pause' : 'Continue') : 'Pause'}
       </button>
-      <div>
+      <div className="absolute right-2">
         Speed (turns per second)
-        <input type="number" className="ml-2 w-30" />
+        <input type="number" className="ml-2 w-30" value={state.params.turnsPerSecond} />
       </div>
+      <button className="invisible">Center</button> {/* ensures container grows */}
     </div>
   )
 }
@@ -43,9 +55,9 @@ const GameControls: React.FC<GameControlsProps> = ({ onStart, onPause, onContinu
 ToDo:
   
   - Controls
-    - Start/restart button
-    - Pause/continue button
-    - Turns per frame input
+    - [x] Start/restart button
+    - [x] Pause/continue button
+    - [ ] Turns per frame input
   - Game parameters
     - Number of players input
     - Initial coins input
