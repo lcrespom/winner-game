@@ -7,7 +7,7 @@ interface GameControlsProps {
   onStart: () => void
   onPause: () => void
   onContinue: () => void
-  onTpsChange: (tps: number) => void
+  onParamsChange: (name: string, value: number) => void
 }
 
 const GameControls: React.FC<GameControlsProps> = ({
@@ -15,6 +15,7 @@ const GameControls: React.FC<GameControlsProps> = ({
   onStart,
   onPause,
   onContinue,
+  onParamsChange,
 }) => {
   const [started, setStarted] = useState(false)
   const [running, setRunning] = useState(false)
@@ -44,7 +45,12 @@ const GameControls: React.FC<GameControlsProps> = ({
       </button>
       <div className="absolute right-2">
         Speed (turns per second)
-        <input type="number" className="ml-2 w-30" value={state.params.turnsPerSecond} />
+        <input
+          type="number"
+          className="ml-2 w-30"
+          value={state.params.turnsPerSecond}
+          onChange={e => onParamsChange('turnsPerSecond', parseInt(e.target.value))}
+        />
       </div>
       <button className="invisible">Center</button> {/* ensures container grows */}
     </div>
@@ -52,19 +58,17 @@ const GameControls: React.FC<GameControlsProps> = ({
 }
 
 /*
-ToDo:
-  
   - Controls
     - [x] Start/restart button
     - [x] Pause/continue button
-    - [ ] Turns per frame input
+    - [x] Turns per frame input
   - Game parameters
-    - Number of players input
-    - Initial coins input
-    - Help turns input
+    - [ ] Number of players input
+    - [ ] Initial coins input
+    - [ ] Help turns input
   - Information
-    - Turn counter
-    - Player counter
+    - [ ] Turn counter
+    - [ ] Player counter
 */
 
 export default GameControls
