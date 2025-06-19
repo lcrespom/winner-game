@@ -12,6 +12,14 @@ interface GameControlsProps {
 
 const NumFmt = Intl.NumberFormat()
 
+let initialTime = 0
+
+function getCurrentTime() {
+  if (initialTime == 0) return ''
+  const elapsedTimeMs = new Date().getTime() - initialTime
+  return new Date(elapsedTimeMs).toISOString().slice(14, 19)
+}
+
 const GameControls: React.FC<GameControlsProps> = ({
   state,
   onStart,
@@ -25,10 +33,12 @@ const GameControls: React.FC<GameControlsProps> = ({
   function startClicked() {
     setStarted(true)
     setRunning(true)
+    initialTime = new Date().getTime()
     onStart()
   }
 
   function pauseClicked() {
+    //TODO account for paused time
     setRunning(running => {
       running = !running
       if (running) onPause()
@@ -39,6 +49,7 @@ const GameControls: React.FC<GameControlsProps> = ({
 
   return (
     <div className="round-border my-4 w-full p-2">
+      {/*---------- First row: game controls ----------*/}
       <div className="relative">
         <button className="absolute left-2" onClick={startClicked}>
           {started ? 'Restart' : 'Start'}
@@ -55,35 +66,55 @@ const GameControls: React.FC<GameControlsProps> = ({
             onChange={e => onParamsChange('turnsPerSecond', parseInt(e.target.value))}
           />
         </div>
-        <button className="invisible">Center</button> {/* ensures container grows */}
+        <button className="invisible">X</button> {/* ensures container grows */}
       </div>
-      <div className="relative">
-        <div className="absolute left-2 mt-4">
+      {/*---------- Second row: game information ----------*/}
+      <div className="relative mt-4">
+        <div className="absolute left-2">
           <b>Turn</b>: {NumFmt.format(state.turn)}
         </div>
-        {/* TODO: time */}
-        <div className="absolute right-2 mt-4">
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <b>Time</b>: {getCurrentTime()}
+        </div>
+        <div className="absolute right-2">
           <b>Players</b>: {NumFmt.format(state.players.length)}
         </div>
-        <button className="invisible">Center</button> {/* ensures container grows */}
+        <div className="invisible">X</div> {/* ensures container grows */}
+      </div>
+      {/*---------- Third row: game parameters ----------*/}
+      <div className="relative mt-4">
+        <div className="absolute left-2">
+          Number of players
+          <input
+            type="number"
+            className="ml-2 w-22"
+            value={state.params.numPlayers}
+            onChange={e => onParamsChange('numPlayers', parseInt(e.target.value))}
+          />
+        </div>
+        <div className="absolute left-1/2 -translate-x-1/2">
+          Initial coins
+          <input
+            type="number"
+            className="ml-2 w-20"
+            value={state.params.initialCoins}
+            onChange={e => onParamsChange('initialCoins', parseInt(e.target.value))}
+          />
+        </div>
+        <div className="absolute right-2">
+          Help every
+          <input
+            type="number"
+            className="mr-2 ml-2 w-20"
+            value={state.params.helpTurns}
+            onChange={e => onParamsChange('helpTurns', parseInt(e.target.value))}
+          />
+          turns
+        </div>
+        <button className="invisible">X</button> {/* ensures container grows */}
       </div>
     </div>
   )
 }
-
-/*
-  - Controls
-    - [x] Start/restart button
-    - [x] Pause/continue button
-    - [x] Turns per frame input
-  - Information
-    - [x] Turn counter
-    - [ ] Elapsed time
-    - [x] Player counter
-  - Game parameters
-    - [ ] Number of players input
-    - [ ] Initial coins input
-    - [ ] Help turns input
-*/
 
 export default GameControls
