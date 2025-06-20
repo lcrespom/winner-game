@@ -49,7 +49,6 @@ const GameControls: React.FC<GameControlsProps> = ({
       if (running) {
         if (pauseStartTime != 0) pausedTime += now - pauseStartTime
         pauseStartTime = 0
-        console.log(pausedTime / 1000)
         onContinue()
       } else {
         pauseStartTime = now

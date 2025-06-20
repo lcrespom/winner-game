@@ -45,7 +45,6 @@ function App() {
       return state
     })
     if (refresh) setTimeout(gameFrame, 1000 / REFRESH_RATE)
-    else console.log('Game over')
   }
 
   function changeParam(name: string, value: number) {
