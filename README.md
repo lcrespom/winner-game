@@ -19,7 +19,7 @@ see how different game conditions affect the behavior of the simulation.
 
 ## Setup
 
-This is plain client-side Vite-React project. It can be built and tested with `node.js` or a
+This is a plain client-side Vite-React project. It can be built and tested with `node.js` or a
 compatible runtime. As usual:
 
 - Initial installation: `npm install`.
