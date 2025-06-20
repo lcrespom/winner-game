@@ -41,8 +41,8 @@ const GameControls: React.FC<GameControlsProps> = ({
     //TODO account for paused time
     setRunning(running => {
       running = !running
-      if (running) onPause()
-      else onContinue()
+      if (running) onContinue()
+      else onPause()
       return running
     })
   }

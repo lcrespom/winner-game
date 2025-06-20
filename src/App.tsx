@@ -17,14 +17,14 @@ let gameParams: GameParams = {
   helpTurns: 0,
 }
 
+let paused = false
+
 function updateGameParam(state: GameState, name: string, value: number) {
   return {
     ...state,
     params: { ...state.params, [name]: value },
   }
 }
-
-function doNothing() {}
 
 function App() {
   const [gameState, setGameState] = useState(() => startGame(gameParams))
@@ -35,6 +35,7 @@ function App() {
   }
 
   function gameFrame() {
+    if (paused) return
     let refresh = true
     setGameState(state => {
       const turnsPerFrame = Math.round(state.params.turnsPerSecond / REFRESH_RATE)
@@ -61,8 +62,11 @@ function App() {
       <GameControls
         state={gameState}
         onStart={startSimulation}
-        onPause={doNothing}
-        onContinue={doNothing}
+        onPause={() => (paused = true)}
+        onContinue={() => {
+          paused = false
+          setTimeout(gameFrame, 0)
+        }}
         onParamsChange={changeParam}
       />
     </>
