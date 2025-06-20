@@ -1,54 +1,26 @@
-# React + TypeScript + Vite
+# Competitive Exclusion
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
 
-Currently, two official plugins are available:
+The famous book [Thinking in Systems](https://en.wikipedia.org/wiki/Thinking_In_Systems:_A_Primer),
+describes the system trap _Success to the Successful —- Competitive Exclusion_, which occurs when
+initial success gives one actor an advantage that leads to further success, while others fall
+behind, eventually being excluded. This feedback loop amplifies inequality and reduces diversity and
+competition.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This is a small simulation game that demonstrates the dynamics of this system trap. The game begins
+with a fixed number of players, each having the same amount of coins. On each turn, each player is
+randomly paired with another player and bet one coin each. The winner is radomly selected and keeps
+the two coins. The game iterates turns until only one player remains.
 
-## Expanding the ESLint configuration
+The game shows a bar graph with the amount of coins each player has as the game progresses. The user
+can control the game parameters, such as the initial number of coins, the turns per second, etc., to
+see how different game conditions affect the behavior of the simulation.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Setup
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+This is plain client-side Vite-React project. It can be built and tested with `node.js` or a
+compatible runtime. As usual:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- Initial installation: `npm install`.
+- Run in development mode: `npm run dev`.
