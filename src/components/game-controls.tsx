@@ -13,10 +13,12 @@ type GameControlsProps = {
 const NumFmt = Intl.NumberFormat()
 
 let initialTime = 0
+let pauseStartTime = 0
+let pausedTime = 0
 
 function getCurrentTime() {
   if (initialTime == 0) return ''
-  const elapsedTimeMs = new Date().getTime() - initialTime
+  const elapsedTimeMs = new Date().getTime() - initialTime - pausedTime
   return new Date(elapsedTimeMs).toISOString().slice(14, 19)
 }
 
@@ -34,6 +36,8 @@ const GameControls: React.FC<GameControlsProps> = ({
     setStarted(true)
     setRunning(true)
     initialTime = new Date().getTime()
+    pauseStartTime = 0
+    pausedTime = 0
     onStart()
   }
 
@@ -41,8 +45,16 @@ const GameControls: React.FC<GameControlsProps> = ({
     //TODO account for paused time
     setRunning(running => {
       running = !running
-      if (running) onContinue()
-      else onPause()
+      const now = new Date().getTime()
+      if (running) {
+        if (pauseStartTime != 0) pausedTime += now - pauseStartTime
+        pauseStartTime = 0
+        console.log(pausedTime / 1000)
+        onContinue()
+      } else {
+        pauseStartTime = now
+        onPause()
+      }
       return running
     })
   }
