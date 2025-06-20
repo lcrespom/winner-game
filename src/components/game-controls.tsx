@@ -61,7 +61,11 @@ const GameControls: React.FC<GameControlsProps> = ({
         <button className="absolute left-2" onClick={startClicked}>
           {started ? 'Restart' : 'Start'}
         </button>
-        <button className="absolute left-1/2 -translate-x-1/2" onClick={pauseClicked}>
+        <button
+          className="absolute left-1/2 -translate-x-1/2"
+          disabled={!started}
+          onClick={pauseClicked}
+        >
           {started ? (running ? 'Pause' : 'Continue') : 'Pause'}
         </button>
         <div className="absolute right-2">

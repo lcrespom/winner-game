@@ -31,6 +31,7 @@ function App() {
 
   function startSimulation() {
     setGameState(startGame(gameParams))
+    paused = false
     setTimeout(gameFrame, 0)
   }
 
