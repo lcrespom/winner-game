@@ -1,13 +1,13 @@
 import { useState } from 'react'
 
-import type { GameState } from '../game-engine/engine'
+import type { GameParams, GameState } from '../game-engine/engine'
 
-interface GameControlsProps {
+type GameControlsProps = {
   state: GameState
   onStart: () => void
   onPause: () => void
   onContinue: () => void
-  onParamsChange: (name: string, value: number) => void
+  onParamsChange: (name: keyof GameParams, value: number) => void
 }
 
 const NumFmt = Intl.NumberFormat()
@@ -47,6 +47,13 @@ const GameControls: React.FC<GameControlsProps> = ({
     })
   }
 
+  const getParamInputProps = (propName: keyof GameParams) => ({
+    type: 'number',
+    value: state.params[propName],
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+      onParamsChange(propName, parseInt(e.target.value)),
+  })
+
   return (
     <div className="round-border my-4 w-full p-2">
       {/*---------- First row: game controls ----------*/}
@@ -59,12 +66,7 @@ const GameControls: React.FC<GameControlsProps> = ({
         </button>
         <div className="absolute right-2">
           Speed (turns per second)
-          <input
-            type="number"
-            className="ml-2 w-30"
-            value={state.params.turnsPerSecond}
-            onChange={e => onParamsChange('turnsPerSecond', parseInt(e.target.value))}
-          />
+          <input className="ml-2 w-30" {...getParamInputProps('turnsPerSecond')} />
         </div>
         <button className="invisible">X</button> {/* ensures container grows */}
       </div>
@@ -85,30 +87,15 @@ const GameControls: React.FC<GameControlsProps> = ({
       <div className="relative mt-4">
         <div className="absolute left-2">
           Number of players
-          <input
-            type="number"
-            className="ml-2 w-22"
-            value={state.params.numPlayers}
-            onChange={e => onParamsChange('numPlayers', parseInt(e.target.value))}
-          />
+          <input className="ml-2 w-22" {...getParamInputProps('numPlayers')} />
         </div>
         <div className="absolute left-1/2 -translate-x-1/2">
           Initial coins
-          <input
-            type="number"
-            className="ml-2 w-20"
-            value={state.params.initialCoins}
-            onChange={e => onParamsChange('initialCoins', parseInt(e.target.value))}
-          />
+          <input className="ml-2 w-20" {...getParamInputProps('initialCoins')} />
         </div>
         <div className="absolute right-2">
           Help every
-          <input
-            type="number"
-            className="mr-2 ml-2 w-20"
-            value={state.params.helpTurns}
-            onChange={e => onParamsChange('helpTurns', parseInt(e.target.value))}
-          />
+          <input className="mr-2 ml-2 w-20" {...getParamInputProps('helpTurns')} />
           turns
         </div>
         <button className="invisible">X</button> {/* ensures container grows */}
