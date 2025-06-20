@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The famous book [Thinking in Systems](https://en.wikipedia.org/wiki/Thinking_In_Systems:_A_Primer),
+The famous [Thinking in Systems](https://en.wikipedia.org/wiki/Thinking_In_Systems:_A_Primer) book
 describes the system trap _Success to the Successful — Competitive Exclusion_, which occurs when
 initial success gives one actor an advantage that leads to further success, while others fall
 behind, eventually being excluded. This feedback loop amplifies inequality and reduces diversity and
