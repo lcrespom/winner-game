@@ -13,7 +13,7 @@ const REFRESH_RATE = 30 // Screen updates per second
 let gameParams: GameParams = {
   numPlayers: 100,
   initialCoins: 10,
-  turnsPerSecond: 100_000,
+  turnsPerSecond: 1_000,
   helpTurns: 0,
 }
 
