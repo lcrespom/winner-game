@@ -1,7 +1,5 @@
 import { useState } from 'react'
 
-import './App.css'
-
 import GameControls from './components/game-controls'
 import GameGraph from './components/game-graph'
 

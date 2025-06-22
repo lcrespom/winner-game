@@ -32,4 +32,11 @@
       0 1px 1px white,
       0 -1px 1px white;
   }
+
+  #root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+  }
 }
