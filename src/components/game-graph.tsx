@@ -28,7 +28,7 @@ function getMaxCoins(state: GameState) {
 
 const YAxisValues: React.FC<{ maxValue: number }> = ({ maxValue }) => {
   return (
-    <div className="absolute top-1 left-1 h-[calc(100%-1rem)] text-sm text-gray-500">
+    <div className="text-ring absolute top-1 left-1 h-[calc(100%-1rem)] text-sm text-gray-500">
       <span className="absolute">{numFmt.format(maxValue)}</span>
       <span className="absolute top-1/4">{numFmt.format((maxValue * 3) / 4)}</span>
       <span className="absolute top-1/2">{numFmt.format((maxValue * 1) / 2)}</span>

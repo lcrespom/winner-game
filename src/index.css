@@ -24,4 +24,12 @@
   .round-border {
     @apply rounded border border-gray-300;
   }
+
+  .text-ring {
+    text-shadow:
+      1px 0 1px white,
+      -1px 0 1px white,
+      0 1px 1px white,
+      0 -1px 1px white;
+  }
 }
