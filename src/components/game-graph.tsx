@@ -48,7 +48,7 @@ export const CoinBarChart: React.FC<CoinBarChartProps> = ({ state }) => {
           <div className="flex flex-1 flex-col items-center justify-end" key={player.id}>
             <div
               className="w-1/2 rounded bg-blue-600"
-              style={{ height: `${barHeight}px` }}
+              style={{ height: `${barHeight}px`, transition: 'height 50ms' }}
             />
           </div>
         )
