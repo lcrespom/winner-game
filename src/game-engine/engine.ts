@@ -3,17 +3,23 @@ export type Player = {
   coins: number
 }
 
-export type GameState = {
-  players: Player[]
-  turn: number
-  params: GameParams
-}
-
 export type GameParams = {
   numPlayers: number
   initialCoins: number
   turnsPerSecond: number
   helpTurns: number
+}
+
+type PopulationHistory = {
+  turn: number
+  population: number
+}[]
+
+export type GameState = {
+  players: Player[]
+  turn: number
+  params: GameParams
+  history: PopulationHistory
 }
 
 //region Exported function
@@ -28,7 +34,8 @@ export function startGame(params: GameParams): GameState {
   for (let i = 1; i <= params.numPlayers; i++) {
     players.push({ id: i, coins: params.initialCoins })
   }
-  return { players, turn: 0, params }
+  const history = [{ turn: 0, population: params.numPlayers }]
+  return { players, turn: 0, params, history }
 }
 
 /**
@@ -38,10 +45,13 @@ export function startGame(params: GameParams): GameState {
  */
 export function stepGame(state: GameState): GameState {
   if (state.players.length <= 1) return state
+  const nextHistory = [...state.history]
   const nextPlayers = round(state.players)
   const nextTurn = state.turn + 1
   checkHelpEverybody(nextTurn, state.params.helpTurns, nextPlayers)
-  return { players: nextPlayers, turn: nextTurn, params: state.params }
+  if (state.players.length > nextPlayers.length)
+    nextHistory.push({ turn: nextTurn, population: nextPlayers.length })
+  return { ...state, players: nextPlayers, turn: nextTurn, history: nextHistory }
 }
 
 /**

@@ -17,6 +17,10 @@ let gameParams: GameParams = {
 
 let paused = false
 
+let tickHandler = () => {}
+
+setInterval(() => tickHandler(), 1000 / REFRESH_RATE)
+
 function updateGameParam(state: GameState, name: string, value: number) {
   return {
     ...state,
@@ -30,19 +34,26 @@ function App() {
   function startSimulation() {
     setGameState(startGame(gameParams))
     paused = false
-    setTimeout(gameFrame, 0)
+    tickHandler = gameFrame
   }
 
   function gameFrame() {
     if (paused) return
-    let refresh = true
+    let done = false
     setGameState(state => {
+      // Workaround to avoid double call in development mode
+      if (done) return state
+      done = true
+      // Check if game over
+      if (state.players.length <= 1) {
+        paused = true
+        return state
+      }
+      // Run the allocated game steps for the current frame
       const turnsPerFrame = Math.round(state.params.turnsPerSecond / REFRESH_RATE)
-      if (state.players.length == 1) refresh = false
       for (let i = 0; i < turnsPerFrame; i++) state = stepGame(state)
       return state
     })
-    if (refresh) setTimeout(gameFrame, 1000 / REFRESH_RATE)
   }
 
   function changeParam(name: string, value: number) {
@@ -61,10 +72,7 @@ function App() {
         state={gameState}
         onStart={startSimulation}
         onPause={() => (paused = true)}
-        onContinue={() => {
-          paused = false
-          setTimeout(gameFrame, 0)
-        }}
+        onContinue={() => (paused = false)}
         onParamsChange={changeParam}
       />
     </>
