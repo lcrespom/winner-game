@@ -28,6 +28,18 @@ function updateGameParam(state: GameState, name: string, value: number) {
   }
 }
 
+function gameFrameSteps(state: GameState) {
+  // Check if game over
+  if (state.players.length <= 1) {
+    paused = true
+    return state
+  }
+  // Run the allocated game steps for the current frame
+  const turnsPerFrame = Math.round(state.params.turnsPerSecond / REFRESH_RATE)
+  for (let i = 0; i < turnsPerFrame; i++) state = stepGame(state)
+  return state
+}
+
 function App() {
   const [gameState, setGameState] = useState(() => startGame(gameParams))
 
@@ -41,18 +53,11 @@ function App() {
     if (paused) return
     let done = false
     setGameState(state => {
-      // Workaround to avoid double call in development mode
+      // Workaround to avoid double invocation in development mode
       if (done) return state
       done = true
-      // Check if game over
-      if (state.players.length <= 1) {
-        paused = true
-        return state
-      }
-      // Run the allocated game steps for the current frame
-      const turnsPerFrame = Math.round(state.params.turnsPerSecond / REFRESH_RATE)
-      for (let i = 0; i < turnsPerFrame; i++) state = stepGame(state)
-      return state
+      // Run a chunk of game steps
+      return gameFrameSteps(state)
     })
   }
 
