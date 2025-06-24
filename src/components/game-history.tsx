@@ -1,23 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { type GameState } from '../game-engine/engine'
 
-interface GameHistoryProps {
-  state: GameState
-}
-
-// const numFmt = Intl.NumberFormat()
-
-// const YAxisValues: React.FC<{ maxValue: number }> = ({ maxValue }) => {
-//   return (
-//     <div className="text-ring absolute top-1 left-1 h-[calc(100%-1rem)] text-sm text-gray-500">
-//       <span className="absolute">{numFmt.format(maxValue)}</span>
-//       <span className="absolute top-1/4">{numFmt.format((maxValue * 3) / 4)}</span>
-//       <span className="absolute top-1/2">{numFmt.format((maxValue * 1) / 2)}</span>
-//       <span className="absolute top-3/4">{numFmt.format((maxValue * 1) / 4)}</span>
-//     </div>
-//   )
-// }
-
 function resizeCanvas(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
   const dpr = window.devicePixelRatio || 1
   const { width, height } = canvas.getBoundingClientRect()
@@ -31,23 +14,28 @@ function resizeCanvas(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) 
 }
 
 function updateCanvas(canvas: HTMLCanvasElement, state: GameState) {
+  const { history } = state
   const ctx = canvas.getContext('2d')
   if (!ctx) return
   resizeCanvas(canvas, ctx)
-  ctx.fillStyle = '#155dfc' // bg-blue-600
+  ctx.fillStyle = '#155dfc' // bg-blue-600 in Tailwind
   const { width, height } = ctx.canvas
-  console.log({ width, height })
-  //   let historyPos = 0
-  //   const turnInc = state.turn / width
+  let historyPos = 0
+  let turn = 0
+  let turnInc = state.turn / width
+  if (turnInc < 1) turnInc = 1
   for (let x = 0; x < width; x++) {
     // Choose a random bar height
-    const barHeight = Math.random() * height // TODO compute real height
+    while (historyPos < history.length && history[historyPos].turn < turn) historyPos++
+    if (historyPos >= history.length) break
+    turn += turnInc
+    const barHeight = (history[historyPos].population / state.params.numPlayers) * height
     // Draw the bar so it sits on the bottom of the canvas
     ctx.fillRect(x, 0, 1, barHeight)
   }
 }
 
-export const GameHistory: React.FC<GameHistoryProps> = ({ state }) => {
+export const GameHistory: React.FC<{ state: GameState }> = ({ state }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {

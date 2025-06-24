@@ -1,10 +1,6 @@
 import React from 'react'
 import { type GameState } from '../game-engine/engine'
 
-interface CoinBarChartProps {
-  state: GameState
-}
-
 let lastMax = 0
 let lastTurn = 0
 
@@ -37,7 +33,7 @@ const YAxisValues: React.FC<{ maxValue: number }> = ({ maxValue }) => {
   )
 }
 
-export const CoinBarChart: React.FC<CoinBarChartProps> = ({ state }) => {
+export const CoinBarChart: React.FC<{ state: GameState }> = ({ state }) => {
   const { players } = state
   const maxCoins = getMaxCoins(state)
   return (
