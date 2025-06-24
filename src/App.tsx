@@ -5,6 +5,7 @@ import GameGraph from './components/game-graph'
 
 import { normalizeGame, startGame, stepGame } from './game-engine/engine'
 import type { GameParams, GameState } from './game-engine/engine'
+import GameHistory from './components/game-history'
 
 const REFRESH_RATE = 30 // Screen updates per second
 
@@ -73,6 +74,7 @@ function App() {
     <>
       <h1>Success to the Successful — Competitive Exclusion</h1>
       <GameGraph state={normalizeGame(gameState)} />
+      <GameHistory state={gameState} />
       <GameControls
         state={gameState}
         onStart={startSimulation}
