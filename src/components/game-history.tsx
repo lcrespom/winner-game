@@ -24,14 +24,16 @@ function updateCanvas(canvas: HTMLCanvasElement, state: GameState) {
   let turn = 0
   let turnInc = state.turn / width
   if (turnInc < 1) turnInc = 1
+  let population = state.params.numPlayers
   for (let x = 0; x < width; x++) {
     // Choose a random bar height
     while (historyPos < history.length && history[historyPos].turn < turn) historyPos++
-    if (historyPos >= history.length) break
-    turn += turnInc
-    const barHeight = (history[historyPos].population / state.params.numPlayers) * height
+    if (historyPos < history.length) population = history[historyPos].population
+    if (turnInc == 1 && historyPos >= history.length) break
+    const barHeight = (population / state.params.numPlayers) * height
     // Draw the bar so it sits on the bottom of the canvas
     ctx.fillRect(x, 0, 1, barHeight)
+    turn += turnInc
   }
 }
 
@@ -44,6 +46,9 @@ export const GameHistory: React.FC<{ state: GameState }> = ({ state }) => {
 
   return (
     <div className="round-border relative box-border flex h-[208px] w-full p-1">
+      <div className="text-ring absolute top-1 right-1/2 translate-x-1/2 text-sm text-gray-500">
+        Population / turn
+      </div>
       <canvas className="h-full w-full" ref={canvasRef}></canvas>
     </div>
   )
